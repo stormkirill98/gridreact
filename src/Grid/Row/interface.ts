@@ -43,7 +43,8 @@ export interface IBaseRowComponentProps
 
 /**
  * Опции строки, которые отдаются прикладникам
- * Такое разделение нужно, потому что мы не должны ждать в опциях columns и contents. Распространяем по контексту.
+ * Такое разделение нужно, потому что мы не должны ждать в опциях columns и contents от прикладников,
+ * распространяем их по контексту.
  */
 export interface IRowComponentProps extends IBaseRowComponentProps {
     columns: ICellConfig[];
