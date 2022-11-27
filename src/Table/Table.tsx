@@ -1,7 +1,7 @@
 import { IColumns, ITable, ITableProps } from "./interface/ITable";
 import React from "react";
 import { TableContext } from "./TableContext";
-import "./style/Table.css";
+import "../style/Table.css";
 
 export { TableCell } from "./TableCell";
 export { TableRow } from "./TableRow";

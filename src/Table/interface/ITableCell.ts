@@ -1,9 +1,9 @@
-import { IItem } from "../../interface/IData";
-import { ICursorProps, IFontProps, IPaddingProps } from "./IGeneral";
+import { TItem } from "../../interface/IData";
+import { ICursorProps, IFontProps, IPaddingProps } from "../../interface/IGeneral";
 import { ReactNode } from "react";
 
 export interface ITableCellRenderProps {
-  item?: IItem;
+  item?: TItem;
 }
 
 export interface ITableCellProps

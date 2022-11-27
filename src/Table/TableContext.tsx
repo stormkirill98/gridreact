@@ -1,8 +1,8 @@
 import React from "react";
-import { IData, IItem } from "../interface/IData";
+import { IData, TItem } from "../interface/IData";
 
 interface IRowContext {
-  item?: IItem;
+  item?: TItem;
 }
 
 interface ITableContext {

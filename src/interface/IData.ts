@@ -1,5 +1,5 @@
-export type IItem = {
-  [key: string]: string;
-};
+export type TContents = Record<string, string|undefined>;
 
-export type IData = IItem[];
+export type TItem = TContents;
+
+export type IData = TItem[];

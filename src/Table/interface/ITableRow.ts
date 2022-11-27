@@ -7,7 +7,7 @@ import {
   IRoundAnglesProps,
   IPaddingProps,
   IActionsProps
-} from "./IGeneral";
+} from "../../interface/IGeneral";
 
 export interface ITableRowProps
   extends IMarkerProps,
