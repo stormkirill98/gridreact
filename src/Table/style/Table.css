@@ -1,0 +1,13 @@
+.table {
+  display: grid;
+}
+
+.table-row,
+.table-body,
+.table-head {
+  display: contents;
+}
+
+.table-head {
+  font-weight: bold;
+}
