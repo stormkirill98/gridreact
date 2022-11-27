@@ -26,15 +26,17 @@ export interface ICellConfig
     IWidthProps,
     IAlignProps,
     IPaddingProps,
-    ITextOverflow {
+    ISeparatorProps,
+    ITextOverflow,
+    IBackgroundProps,
+    IHoverProps{
   // TODO IPaddingProps вместо cellPadding, но добавил paddingTop, paddingBottom
-  // TODO для каждой колонки нужен свой размер разделителя???
-  separatorSize?: string;
-
+  // TODO ISeparatorProps вместо columnSeparatorSize, но добавились separatorTop, separatorBottom
+  // TODO backgroundColorStyle -> backgroundStyle(IBackgroundProps)
+  // TODO hoverBackgroundStyle -> backgroundHoverStyle(IHoverProps),
+  //  но добавилось highlightOnHover(точно неплохо от этой опции)
   editable?: boolean;
 
-  backgroundColorStyle?: string;
-  hoverBackgroundStyle?: string;
   templateOptions?: object;
 
   displayProperty?: string;
@@ -74,10 +76,11 @@ export interface IBaseCellComponentProps
   CellComponent?: TCellComponent;
   // TODO еще нужно подумать над displayType, highlightValue(searchValue),
   //  style, theme, readOnly
+
   /**
    * Оригинальная настройка ячейки, которую прикладники задают в опции columns
    * @remark нужно прокинуть ее, чтобы отдать прикладникам в компонент
-   * TODO прикладникам не обязательно его прокидывать, а нам прикладникам обязательно??
+   * TODO прикладникам не обязательно его прокидывать, а нам прикладникам обязательно. Как тут интерфес написать??
    */
   config?: ICellConfig;
 }
