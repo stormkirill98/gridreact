@@ -20,7 +20,7 @@ import {
   TSeparatorSize,
   TTagStyle
 } from "./TGeneral";
-import React from "react";
+import React, { ReactEventHandler } from "react";
 
 /**
  * Интерфейс опций для отображения маркера
@@ -374,14 +374,14 @@ export interface IBaseProps extends IEventHandlers {
  * Интерфейс описывающий поддерживаемые обработчики нативных событий
  */
 export interface IEventHandlers {
-  onClick?: Function;
-  onDoubleClick?: Function;
-  onMouseDown?: Function;
-  onMouseUp?: Function;
-  onMouseLeave?: Function;
-  onMouseEnter?: Function;
-  onMouseMove?: Function;
-  onWheel?: Function;
-  onKeyDown?: Function;
-  onContextMenu?: Function;
+  onClick?: ReactEventHandler<HTMLDivElement>;
+  onDoubleClick?: ReactEventHandler<HTMLDivElement>;
+  onMouseDown?: ReactEventHandler<HTMLDivElement>;
+  onMouseUp?: ReactEventHandler<HTMLDivElement>;
+  onMouseLeave?: ReactEventHandler<HTMLDivElement>;
+  onMouseEnter?: ReactEventHandler<HTMLDivElement>;
+  onMouseMove?: ReactEventHandler<HTMLDivElement>;
+  onWheel?: ReactEventHandler<HTMLDivElement>;
+  onKeyDown?: ReactEventHandler<HTMLDivElement>;
+  onContextMenu?: ReactEventHandler<HTMLDivElement>;
 }

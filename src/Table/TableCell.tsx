@@ -11,11 +11,6 @@ export function TableCell(props: ITableCellProps) {
 
   return (
     <div className="table-cell">
-      {props.children ? (
-        React.cloneElement(props.children, { item })
-      ) : props.displayProperty ? (
-        <div>{item[props.displayProperty]}</div>
-      ) : null}
     </div>
   );
 }

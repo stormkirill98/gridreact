@@ -15,13 +15,13 @@ import {
   IWidthProps,
 } from "../../interface/IGeneral";
 import React from "react";
-import { TContents } from "../../interface/IData";
+import { TItem } from "../../interface/IData";
 
 /**
  * Интерфейс настройки колонки,
  * который задается прикладниками в опции columns на списке
  */
-export interface ICellConfig
+export interface IColumnConfig
   extends IFontProps,
     IWidthProps,
     IAlignProps,
@@ -35,6 +35,10 @@ export interface ICellConfig
   // TODO backgroundColorStyle -> backgroundStyle(IBackgroundProps)
   // TODO hoverBackgroundStyle -> backgroundHoverStyle(IHoverProps),
   //  но добавилось highlightOnHover(точно неплохо от этой опции)
+
+  // TODO добавить опцию dependenceProperties (зависимые значения рекорда), чтобы оптимально перерисовывать ячейки,
+  //  если не задано то всегда перерисовываемся
+
   editable?: boolean;
 
   templateOptions?: object;
@@ -44,6 +48,7 @@ export interface ICellConfig
   tagStyleProperty?: string;
   tooltipProperty?: string;
 
+  // TODO displayType не должен настраиваться, а должен сам высчитыватсья из формата поля рекорда
   displayType?: string;
   displayTypeOptions?: object;
 
@@ -76,17 +81,16 @@ export interface IBaseCellComponentProps
   CellComponent?: TCellComponent;
   // TODO еще нужно подумать над displayType, highlightValue(searchValue),
   //  style, theme, readOnly
+}
 
+export interface ICellComponentProps extends IBaseCellComponentProps {
+  item: TItem;
   /**
    * Оригинальная настройка ячейки, которую прикладники задают в опции columns
    * @remark нужно прокинуть ее, чтобы отдать прикладникам в компонент
    * TODO прикладникам не обязательно его прокидывать, а нам прикладникам обязательно. Как тут интерфес написать??
    */
-  config?: ICellConfig;
-}
-
-export interface ICellComponentProps extends IBaseCellComponentProps {
-  contents: TContents;
+  config: IColumnConfig;
 }
 
 export type TCellComponent = React.FunctionComponent<ICellComponentProps>;

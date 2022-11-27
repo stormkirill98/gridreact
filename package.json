@@ -12,6 +12,7 @@
   "devDependencies": {
     "@types/react": "17.0.20",
     "@types/react-dom": "^18.0.9",
+    "react-error-overlay": "^6.0.9",
     "typescript": "4.4.2"
   },
   "scripts": {
@@ -25,5 +26,10 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "eslintConfig": {
+    "extends": [
+      "react-app"
+    ]
+  }
 }

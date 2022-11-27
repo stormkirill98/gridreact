@@ -1,12 +1,13 @@
 import { TFontWeight } from "./TGeneral";
 
-export interface TContents extends Record<string, any> {
+interface TRecord extends Record<string, any> {
+  key?: number;
   a?: string;
   b?: string;
   c?: string;
   fontWeight?: TFontWeight;
 }
 
-export type TItem = TContents;
+export type TItem = TRecord;
 
 export type IData = TItem[];

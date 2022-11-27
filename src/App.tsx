@@ -1,23 +1,24 @@
 import "./styles.css";
-import { ReactElement } from "react";
+import {ReactElement, useMemo, useState} from 'react';
 
 import {
   GridView,
-  RowComponent,
-  IRowComponentProps,
+  ItemComponent,
+  IItemComponentProps,
   CellComponent,
   ICellComponentProps,
 } from "./Grid/Grid";
 
-import {IData, TContents} from './interface/IData';
-import { IEventHandlers } from "./interface/IGeneral";
-import { ICellConfig } from "./Grid/Cell/interface";
+import {IData, TItem} from './interface/IData';
+import { IColumnConfig } from "./Grid/Cell/interface";
+import {IItemEventHandlers} from './Grid/GridView';
 
 function generateData(count: Number): IData {
-  const result: TContents[] = [];
+  const result: TItem[] = [];
 
   for (let idx = 1; idx <= count; idx++) {
     result.push({
+      key: idx,
       a: `cell_${idx}_a`,
       b: `cell_${idx}_b`,
       c: `cell_${idx}_c`,
@@ -28,8 +29,8 @@ function generateData(count: Number): IData {
   return result;
 }
 
-function MyRowComponent(props: IRowComponentProps): ReactElement {
-  return <RowComponent fontWeight={props.contents.fontWeight} />;
+function MyItemComponent(props: IItemComponentProps): ReactElement {
+  return <ItemComponent fontWeight={props.item.fontWeight}/>;
 }
 
 interface ICellTemplateOptions {
@@ -37,12 +38,12 @@ interface ICellTemplateOptions {
 }
 
 function MyCellComponent(props: ICellComponentProps): ReactElement {
-  const displayValue = "custom_" + props.contents?.c;
+  const displayValue = "custom_" + props.item?.c;
   return <CellComponent displayValue={displayValue} />;
 }
 
 const TABLE_DATA = generateData(10);
-const COLUMNS: ICellConfig[] = [
+const COLUMNS: IColumnConfig[] = [
   { width: "1fr", displayProperty: "a" },
   { width: "1fr", displayProperty: "b" },
   {
@@ -54,16 +55,19 @@ const COLUMNS: ICellConfig[] = [
 ];
 
 export default function App() {
-  const handlers: IEventHandlers = {
-    onClick: () => console.log("click on row"),
-  };
+  const [markedKey, setMarkedKey] = useState(1);
+
+  const handlers: IItemEventHandlers = useMemo(() => ({
+    onClick: (event, item) => item.key && setMarkedKey(item.key),
+  }), []);
   return (
     <div className="App">
       <GridView
         items={TABLE_DATA}
         columns={COLUMNS}
         handlers={handlers}
-        RowComponent={MyRowComponent}
+        ItemComponent={MyItemComponent}
+        markedKey={markedKey}
       />
     </div>
   );

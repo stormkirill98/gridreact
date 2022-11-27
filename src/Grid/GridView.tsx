@@ -1,24 +1,42 @@
-import React, { ReactElement } from "react";
-import { IData } from "../interface/IData";
-import { RowComponent as DefaultRowComponent } from "./Row/RowComponent";
-import {IRowContext, RowContext} from "./Row/RowContext";
+import React, {ReactElement, SyntheticEvent} from 'react';
+import {IData, TItem} from '../interface/IData';
+import { ItemComponent as DefaultItemComponent } from "./Item/ItemComponent";
+import {IItemContext, ItemContext} from "./Item/ItemContext";
 import "../style/Table.css";
-import {ICellConfig} from "./Cell/interface";
-import {IRowComponentProps, TRowComponent} from "./Row/interface";
-import {IEventHandlers} from "../interface/IGeneral";
+import {IColumnConfig} from "./Cell/interface";
+import {TItemComponent} from "./Item/interface";
+import {TFontWeight} from '../interface/TGeneral';
 
 interface IGridViewProps {
   items: IData;
-  RowComponent?: TRowComponent;
-  columns: ICellConfig[];
+  columns: IColumnConfig[];
+  ItemComponent?: TItemComponent;
+  fontWeight?: TFontWeight;
+  markedKey?: number;
 
   /**
    * Обработчики событий из BaseControl
    */
-  handlers: IEventHandlers;
+  handlers: IItemEventHandlers;
 }
 
-function getGridTemplateColumns(columns?: ICellConfig[]): string {
+/**
+ * Интерфейс описывающий обработчики событий записей
+ */
+export interface IItemEventHandlers {
+  onClick?: (event: SyntheticEvent, item: TItem) => void;
+  onDoubleClick?: (event: SyntheticEvent, item: TItem) => void;
+  onMouseDown?: (event: SyntheticEvent, item: TItem) => void;
+  onMouseUp?: (event: SyntheticEvent, item: TItem) => void;
+  onMouseLeave?: (event: SyntheticEvent, item: TItem) => void;
+  onMouseEnter?: (event: SyntheticEvent, item: TItem) => void;
+  onMouseMove?: (event: SyntheticEvent, item: TItem) => void;
+  onWheel?: (event: SyntheticEvent, item: TItem) => void;
+  onKeyDown?: (event: SyntheticEvent, item: TItem) => void;
+  onContextMenu?: (event: SyntheticEvent, item: TItem) => void;
+}
+
+function getGridTemplateColumns(columns?: IColumnConfig[]): string {
   let result = "";
 
   if (!columns) {
@@ -42,25 +60,37 @@ export function GridView(props: IGridViewProps): ReactElement {
     <div style={styles} className="table">
       <div className="table-body">
         {props.items.map((item, index) => {
-          const contextValue: IRowContext = {
-            columnsProps: props.columns.map((column) => ({
+          const isMarkedItem = item.key === props.markedKey;
+
+          const itemContextValue: IItemContext = {
+            cellsData: props.columns.map((column, index) => ({
               displayValue: column.displayProperty && item[column.displayProperty],
-              CellComponent: column.CellComponent
+              CellComponent: column.CellComponent,
+              config: column,
+              markerVisible: isMarkedItem && index === 0
             })),
-            contents: item,
-            handlers: props.handlers,
+            item: item,
+            handlers: {
+              // тут нужно прокинуть все обработчики и забиндить item
+              onClick: (event) => props.handlers.onClick?.(event, item)
+            },
+
+            // тут прокидываем все опции, заданные на вьюхе, чтобы избавиться от скоупа
+            fontWeight: props.fontWeight,
+            markerVisible: isMarkedItem
           };
 
-          const RowComponent = props.RowComponent || DefaultRowComponent;
-          // Обязательно отдаем прикладникам рекорд и конфиг колонок
-          const rowProps: IRowComponentProps = {
-            columns: props.columns,
-            contents: item
-          };
+          const ItemComponent: TItemComponent = props.ItemComponent || DefaultItemComponent;
           return (
-            <RowContext.Provider value={contextValue} key={index}>
-              {React.createElement(RowComponent, rowProps)}
-            </RowContext.Provider>
+            <ItemContext.Provider value={itemContextValue} key={index}>
+              <ItemComponent item={item}
+                             columns={props.columns}
+
+                             {...{}/*тут прокидываем все опции*/}
+                             fontWeight={props.fontWeight}
+                             markerVisible={isMarkedItem}
+              />
+            </ItemContext.Provider>
           );
         })}
       </div>
