@@ -32,6 +32,7 @@ export interface IBaseRowComponentProps
         IStickyProps,
         IShadowProps,
         IBaseProps {
+    // TODO нужно другое название, key зарезервированное название реактом
     key?: string | number | null;
 
     editable?: boolean;
