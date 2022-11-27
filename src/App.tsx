@@ -9,12 +9,12 @@ import {
   ICellComponentProps,
 } from "./Grid/Grid";
 
-import { IData } from "./interface/IData";
+import {IData, TContents} from './interface/IData';
 import { IEventHandlers } from "./interface/IGeneral";
 import { ICellConfig } from "./Grid/Cell/interface";
 
 function generateData(count: Number): IData {
-  const result = [];
+  const result: TContents[] = [];
 
   for (let idx = 1; idx <= count; idx++) {
     result.push({

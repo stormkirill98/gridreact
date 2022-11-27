@@ -41,7 +41,7 @@ function renderCells(
         <CellContext.Provider value={cellContext} key={i}>
           <CellComponent
               {
-                /*TODO как избавиться от этого сплайса? 2 раза расписывать каждую опцию? Тут и в mergeProps*/
+                /*TODO как избавиться от этого слайса? 2 раза расписывать каждую опцию? Тут и в mergeProps*/
                 ...mergedColumnProps
               }
               contents={contents}
@@ -56,7 +56,7 @@ function renderCells(
 export function RowComponent(props: IBaseRowComponentProps): ReactElement {
   const rowContext = useContext(RowContext);
   return (
-    <div className="table-row">
+    <div className="table-row" onClick={() => rowContext.handlers.onClick?.()}>
       {props.children || renderCells(rowContext.columnsProps, rowContext.contents, props)}
     </div>
   );
