@@ -10,8 +10,7 @@ import {
     IPaddingProps,
     IShadowProps,
     IStickyProps,
-    ITextOverflow,
-    IWidthProps
+    ITextOverflow
 } from "../../interface/IGeneral";
 import {FunctionComponent} from "react";
 import {ICellConfig} from "../Cell/interface";
@@ -22,7 +21,6 @@ import {TContents} from "../../interface/IData";
  */
 export interface IBaseRowComponentProps
     extends IFontProps,
-        IWidthProps,
         IAlignProps,
         IPaddingProps,
         ITextOverflow,
