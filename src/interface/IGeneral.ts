@@ -357,7 +357,7 @@ export interface IStickyProps {
  * Интерфейс опций для настройки тэга
  */
 export interface ITagProps {
-  tagVisible?: TVisibility;
+  tagVisibility?: TVisibility;
   tagStyle?: TTagStyle;
   onTagClick?: ReactEventHandler<HTMLDivElement>;
   onTagHover?: ReactEventHandler<HTMLDivElement>;

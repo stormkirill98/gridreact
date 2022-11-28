@@ -3,14 +3,16 @@ import {
     IAlignProps,
     IBackgroundProps,
     IBaseProps,
-    IBorderProps, ICheckboxProps,
+    IBorderProps,
+    ICheckboxProps,
     ICursorProps,
     IFontProps,
     IHoverProps,
     IMarkerProps,
     IPaddingProps,
     IShadowProps,
-    IStickyProps, ITagProps,
+    IStickyProps,
+    ITagProps,
     ITextOverflowProps
 } from '../../interface/IGeneral';
 import {FunctionComponent} from "react";
