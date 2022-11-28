@@ -1,4 +1,5 @@
 import {
+  IActionsProps,
   IAlignProps,
   IBackgroundProps,
   IBaseProps,
@@ -11,9 +12,9 @@ import {
   IShadowProps,
   IStickyProps,
   ITagProps,
-  ITextOverflow,
+  ITextOverflowProps,
   IWidthProps,
-} from "../../interface/IGeneral";
+} from '../../interface/IGeneral';
 import React from "react";
 import { TItem } from "../../interface/IData";
 
@@ -27,7 +28,7 @@ export interface IColumnConfig
     IAlignProps,
     IPaddingProps,
     ISeparatorProps,
-    ITextOverflow,
+    ITextOverflowProps,
     IBackgroundProps,
     IHoverProps{
   // TODO IPaddingProps вместо cellPadding, но добавил paddingTop, paddingBottom
@@ -60,20 +61,20 @@ export interface IColumnConfig
 }
 
 export interface IBaseCellComponentProps
-  extends IFontProps,
-    IWidthProps,
+  extends IBaseProps,
+    IFontProps,
     IAlignProps,
     IPaddingProps,
-    ITextOverflow,
+    ITextOverflowProps,
     IMarkerProps,
     ICursorProps,
     IHoverProps,
     IBackgroundProps,
-    ISeparatorProps,
     IStickyProps,
     IShadowProps,
     ITagProps,
-    IBaseProps {
+    IActionsProps,
+    ISeparatorProps {
   /**
    * Отображаемое значение
    */

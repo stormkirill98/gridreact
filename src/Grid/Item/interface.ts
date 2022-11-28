@@ -1,17 +1,18 @@
 import {
+    IActionsProps,
     IAlignProps,
     IBackgroundProps,
     IBaseProps,
-    IBorderProps,
+    IBorderProps, ICheckboxProps,
     ICursorProps,
     IFontProps,
     IHoverProps,
     IMarkerProps,
     IPaddingProps,
     IShadowProps,
-    IStickyProps,
-    ITextOverflow
-} from "../../interface/IGeneral";
+    IStickyProps, ITagProps,
+    ITextOverflowProps
+} from '../../interface/IGeneral';
 import {FunctionComponent} from "react";
 import {IColumnConfig} from "../Cell/interface";
 import {TItem} from "../../interface/IData";
@@ -22,18 +23,21 @@ import {TItem} from "../../interface/IData";
  * TODO сделать автодоку
  */
 export interface IBaseItemComponentProps
-    extends IFontProps,
+    extends IBaseProps,
+        IFontProps,
         IAlignProps,
         IPaddingProps,
-        ITextOverflow,
+        ITextOverflowProps,
         IMarkerProps,
         ICursorProps,
         IHoverProps,
         IBackgroundProps,
-        IBorderProps,
         IStickyProps,
         IShadowProps,
-        IBaseProps {
+        ITagProps,
+        IBorderProps,
+        ICheckboxProps,
+        IActionsProps {
     keyValue?: string | number | null;
 
     // TODO пока что убрать, над редактированием потом подумаем

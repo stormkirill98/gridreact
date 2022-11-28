@@ -279,7 +279,7 @@ export interface IAlignProps {
 /**
  * Интерфейс опций для обрезания текста
  */
-export interface ITextOverflow {
+export interface ITextOverflowProps {
   textOverflow?: TTextOverflow;
 }
 
@@ -359,8 +359,8 @@ export interface IStickyProps {
 export interface ITagProps {
   tagVisible?: TVisibility;
   tagStyle?: TTagStyle;
-  onTagClick?: (event: React.BaseSyntheticEvent) => void;
-  onTagHover?: (event: React.BaseSyntheticEvent) => void;
+  onTagClick?: ReactEventHandler<HTMLDivElement>;
+  onTagHover?: ReactEventHandler<HTMLDivElement>;
 }
 
 // TODO Какие-то крайне базовые пропсы, так же как и IEventHandlers
