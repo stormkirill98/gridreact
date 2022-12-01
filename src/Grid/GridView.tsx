@@ -1,10 +1,10 @@
-import React, {ReactElement, SyntheticEvent} from 'react';
+import {memo, ReactElement, SyntheticEvent} from 'react';
 import {IData, TItem} from '../interface/IData';
-import { ItemComponent as DefaultItemComponent } from "./Item/ItemComponent";
+import { default as DefaultItemComponent } from "./Item/ItemComponent";
 import {IItemContext, ItemContext} from "./Item/ItemContext";
 import "../style/Table.css";
 import {IColumnConfig} from "./Cell/interface";
-import {TItemComponent} from "./Item/interface";
+import {IItemComponentProps, TItemComponent} from './Item/interface';
 import {TFontWeight} from '../interface/TGeneral';
 
 interface IGridViewProps {
@@ -51,6 +51,45 @@ function getGridTemplateColumns(columns?: IColumnConfig[]): string {
   return result;
 }
 
+function ItemWrapperComponent(
+    props: IItemComponentProps & {handlers: IItemEventHandlers, ItemComponent?: TItemComponent}
+): ReactElement {
+  const item = props.item;
+
+  const itemContextValue: IItemContext = {
+    cellsData: props.columns.map((column, index) => ({
+      displayValue: column.displayProperty && item[column.displayProperty],
+      CellComponent: column.CellComponent,
+      config: column,
+      markerVisible: props.markerVisible && index === 0
+    })),
+    item: item,
+    handlers: {
+      // тут нужно прокинуть все обработчики и забиндить item
+      onClick: (event) => props.handlers.onClick?.(event, item)
+    },
+
+    // тут прокидываем все опции, заданные на вьюхе, чтобы избавиться от скоупа
+    fontWeight: props.fontWeight,
+    markerVisible: props.markerVisible
+  };
+
+  const ItemComponent: TItemComponent = props.ItemComponent || DefaultItemComponent;
+  return (
+      <ItemContext.Provider value={itemContextValue}>
+        <ItemComponent item={item}
+                       columns={props.columns}
+
+                       {...{}/*тут прокидываем все опции*/}
+                       fontWeight={props.fontWeight}
+                       markerVisible={props.markerVisible}
+        />
+      </ItemContext.Provider>
+  );
+}
+
+const ItemWrapperComponentMemo = memo(ItemWrapperComponent);
+
 export function GridView(props: IGridViewProps): ReactElement {
   const styles = {
     gridTemplateColumns: getGridTemplateColumns(props.columns)
@@ -59,40 +98,21 @@ export function GridView(props: IGridViewProps): ReactElement {
   return (
     <div style={styles} className="table">
       <div className="table-body">
-        {props.items.map((item, index) => {
-          const isMarkedItem = item.key === props.markedKey;
+        {
+          props.items.map((item) =>
+            <ItemWrapperComponentMemo
+              key={item.key}
+              item={item}
 
-          const itemContextValue: IItemContext = {
-            cellsData: props.columns.map((column, index) => ({
-              displayValue: column.displayProperty && item[column.displayProperty],
-              CellComponent: column.CellComponent,
-              config: column,
-              markerVisible: isMarkedItem && index === 0
-            })),
-            item: item,
-            handlers: {
-              // тут нужно прокинуть все обработчики и забиндить item
-              onClick: (event) => props.handlers.onClick?.(event, item)
-            },
-
-            // тут прокидываем все опции, заданные на вьюхе, чтобы избавиться от скоупа
-            fontWeight: props.fontWeight,
-            markerVisible: isMarkedItem
-          };
-
-          const ItemComponent: TItemComponent = props.ItemComponent || DefaultItemComponent;
-          return (
-            <ItemContext.Provider value={itemContextValue} key={index}>
-              <ItemComponent item={item}
-                             columns={props.columns}
-
-                             {...{}/*тут прокидываем все опции*/}
-                             fontWeight={props.fontWeight}
-                             markerVisible={isMarkedItem}
-              />
-            </ItemContext.Provider>
-          );
-        })}
+              ItemComponent={props.ItemComponent}
+              handlers={props.handlers}
+              columns={props.columns}
+              {...{}/*тут прокидываем все опции записи*/}
+              fontWeight={props.fontWeight}
+              markerVisible={props.markedKey === item.key}
+            />
+          )
+        }
       </div>
     </div>
   );

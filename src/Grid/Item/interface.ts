@@ -45,10 +45,12 @@ export interface IBaseItemComponentProps
     // TODO пока что убрать, над редактированием потом подумаем
     editable?: boolean;
 
-    // TODO style - isMaster. Master - это компонент-обертка над списком, которая должна настроить правильно опции.
+    // TODO style=master. Master - это компонент-обертка над списком, которая должна настроить правильно опции.
     // TODO theme удалить
     // TODO readonly удалить
 
+    // TODO прокидывание контентных опций multiSelectTemplate, expanderTemplate
+    //  думаю должны сделать не контентные опции, а просто предоставить темплейты+контексты для них
 
     // TODO еще нужно подумать над TreeGrid сразу, чтобы не копипастить код
     //  в TreeGrid будет свой темплейт ячейки. Сделать CellContent и CellContentComponent.

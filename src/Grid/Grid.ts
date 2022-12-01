@@ -1,6 +1,6 @@
 export { GridView } from "./GridView";
-export { ItemComponent } from "./Item/ItemComponent";
+export { default as ItemComponent } from "./Item/ItemComponent";
 export type { IItemComponentProps } from "./Item/interface";
-export { CellComponent } from "./Cell/CellComponent";
+export { default as CellComponent } from "./Cell/CellComponent";
 export type { ICellComponentProps } from "./Cell/interface";
 

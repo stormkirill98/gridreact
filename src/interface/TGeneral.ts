@@ -195,3 +195,5 @@ export type TTagStyle =
   | "success"
   | "warning"
   | "secondary";
+
+export type TDisplayType = 'string' | 'date' | 'number' | 'money';

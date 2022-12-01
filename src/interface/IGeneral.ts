@@ -18,7 +18,8 @@ import {
   TTextOverflow,
   TBackgroundStyle,
   TSeparatorSize,
-  TTagStyle
+  TTagStyle,
+  TDisplayType
 } from "./TGeneral";
 import React, { ReactEventHandler } from "react";
 
@@ -384,4 +385,9 @@ export interface IEventHandlers {
   onWheel?: ReactEventHandler<HTMLDivElement>;
   onKeyDown?: ReactEventHandler<HTMLDivElement>;
   onContextMenu?: ReactEventHandler<HTMLDivElement>;
+}
+
+export interface IDisplayTypeProps {
+  displayType?: TDisplayType;
+  displayTypeOptions?: object;
 }

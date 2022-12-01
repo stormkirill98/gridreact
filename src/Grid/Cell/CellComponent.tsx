@@ -1,9 +1,9 @@
-import React, {CSSProperties, ReactElement} from "react";
+import React, {CSSProperties, memo, ReactElement} from "react";
 import {IBaseCellComponentProps} from "./interface";
 import {CellContext} from "./CellContext";
 import {mergeProps} from '../PropsMergerator';
 
-export function CellComponent(props: IBaseCellComponentProps): ReactElement {
+function CellComponent(props: IBaseCellComponentProps): ReactElement {
   const cellContext = React.useContext(CellContext);
   const mergedProps = mergeProps(props, cellContext, undefined, undefined);
 
@@ -20,3 +20,7 @@ export function CellComponent(props: IBaseCellComponentProps): ReactElement {
     </div>
   );
 }
+
+// Если прикладник обернул нашу ячейку, то при перерисовки его компонента наш CellComponent
+// должен перерисоваться только если изменили опцию или если мы изменили контекст
+export default memo(CellComponent);

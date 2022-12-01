@@ -3,7 +3,7 @@ import {
   IAlignProps,
   IBackgroundProps,
   IBaseProps,
-  ICursorProps,
+  ICursorProps, IDisplayTypeProps,
   IFontProps,
   IHoverProps,
   IMarkerProps,
@@ -74,12 +74,13 @@ export interface IBaseCellComponentProps
     IShadowProps,
     ITagProps,
     IActionsProps,
-    ISeparatorProps {
+    ISeparatorProps,
+    IDisplayTypeProps {
   /**
    * Отображаемое значение
    */
   displayValue?: string;
-  CellComponent?: TCellComponent;
+
   // TODO еще нужно подумать над displayType, highlightValue(searchValue),
   //  style, theme, readOnly
 }
@@ -89,7 +90,6 @@ export interface ICellComponentProps extends IBaseCellComponentProps {
   /**
    * Оригинальная настройка ячейки, которую прикладники задают в опции columns
    * @remark нужно прокинуть ее, чтобы отдать прикладникам в компонент
-   * TODO прикладникам не обязательно его прокидывать, а нам прикладникам обязательно. Как тут интерфес написать??
    */
   config: IColumnConfig;
 }
