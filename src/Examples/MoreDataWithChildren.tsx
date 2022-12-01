@@ -8,7 +8,7 @@ const TABLE_DATA = generateData(200);
 export default function MoreDataWithChildren(): React.ReactElement {
    const [markedKey, setMarkedKey] = React.useState<any>(null);
 
-   const onRowClick: TRowEventHandler = (params) => setMarkedKey(params.item.key);
+   const onRowClick: TRowEventHandler = (params) => setMarkedKey(params.item.get('key'));
    return (
       <div className="App">
          <Grid data={TABLE_DATA} keyProperty='key' onRowClick={onRowClick} markedKey={markedKey}>

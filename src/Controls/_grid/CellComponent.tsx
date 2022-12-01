@@ -25,7 +25,7 @@ function getClassName(props: ICellProps): string {
 }
 
 function CellComponent(props: ICellProps): ReactElement {
-   const displayValue = props.item[props.config.displayProperties[0]];
+   const displayValue = props.item.get(props.config.displayProperties[0]);
    return <span className={getClassName(props)}>
       {displayValue}
    </span>;

@@ -12,7 +12,6 @@ interface IRowEventHandlerParams {
    rowElement: HTMLDivElement|null;
    cellElement: HTMLDivElement|null;
    item: TItem;
-   // TODO надо прокидывать
    column?: IColumnConfig;
 }
 
@@ -25,30 +24,44 @@ export interface IRowProps extends IEventHandlers {
    marked: boolean;
 }
 
-function bindRowEventHandler(rowData: TItem, handler?: TRowEventHandler): React.ReactEventHandler|undefined {
+function bindRowEventHandler(rowData: TItem, columns: IColumnConfig[], handler?: TRowEventHandler): React.ReactEventHandler|undefined {
    if (!handler) {
       return undefined;
    }
 
    return (event) => {
       const target = event.target as HTMLDivElement;
-
+      const rowElement: HTMLDivElement|null = target.closest('.table-row');
+      const cellElement: HTMLDivElement|null = target.closest('.table-cell');
+      const cellIndex = rowElement?.childNodes && cellElement
+          ? Array.from(rowElement?.childNodes).findIndex((it) => it === cellElement)
+          : -1;
+      const column = columns[cellIndex];
       handler({
          event,
          item: rowData,
-         rowElement: target.closest('.table-row'),
-         cellElement: target.closest('.table-cell')
+         rowElement,
+         cellElement,
+         column
       })
    }
 }
 
+function useForceUpdate(){
+   const [_, setValue] = React.useState(0); // integer state
+   return () => setValue(value => value + 1); // update state to force render
+}
+
 function RowComponent(props: IRowProps): ReactElement {
-   return <div className='table-row' onClick={bindRowEventHandler(props.item, props.onClick)}>
+   const forceUpdate = useForceUpdate();
+   props.item.setChangeCallback(((field, value) => forceUpdate()));
+
+   return <div className='table-row' onClick={bindRowEventHandler(props.item, props.columns, props.onClick)}>
       {
          props.columns.map((column, index) => {
             // TODO нужно валидировать названия полей, т.к. они могут совпасть с названием наших опций.
             const dependentProperties: Record<string, any> = {};
-            column.displayProperties.forEach((property) => dependentProperties[property] = props.item[property])
+            column.displayProperties.forEach((property) => dependentProperties[property] = props.item.get(property))
             return <CellComponent key={index}
                                   {...dependentProperties}
                                   config={column}

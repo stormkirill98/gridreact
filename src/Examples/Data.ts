@@ -1,18 +1,18 @@
 import { IColumnConfig } from '../Controls/grid';
-import {IData, TItem} from '../Controls/interface/IData';
+import {IData, Item, TItem} from '../Controls/interface/IData';
 
 export function generateData(count: Number): IData {
    const result: TItem[] = [];
 
    for (let idx = 1; idx <= count; idx++) {
-      result.push({
+      result.push(new Item({
          key: idx,
          a: `${idx}_a`,
          b: `${idx}_b`,
          c: `${idx}_c`,
          d: `${idx}_d`,
          e: `${idx}_e`
-      });
+      }));
    }
 
    return result;

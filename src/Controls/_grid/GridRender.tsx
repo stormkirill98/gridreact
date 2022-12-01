@@ -25,7 +25,7 @@ function GridRender(props: IRenderProps): React.ReactElement {
          <div className='table-body'>
             {
                props.data.map((rowData) => {
-                  const key = rowData[props.keyProperty];
+                  const key = rowData.get(props.keyProperty);
                   return <RowComponent key={key}
                                        item={rowData}
                                        columns={props.columns}

@@ -1,6 +1,7 @@
 import {TRowEventHandler} from './RowComponent';
+import {Item} from "../interface/IData";
 
-export type TItem = Record<string, any>;
+export type TItem = Item;
 export type TKey = string|number|null;
 
 export interface IDataProps {

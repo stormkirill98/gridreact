@@ -3,6 +3,7 @@ import React from 'react';
 import Simple from './Examples/Simple';
 import MoreDataColumnsOption from './Examples/MoreDataColumnsOption';
 import MoreDataWithChildren from './Examples/MoreDataWithChildren';
+import RerenderByChangeField from "./Examples/RerenderByChangeField";
 
 const EXAMPLES: any = {
    Simple: {
@@ -16,6 +17,10 @@ const EXAMPLES: any = {
    MoreDataWithChildren: {
       example: MoreDataWithChildren,
       title: 'Много записей. Колонки настроены с помощью children.'
+   },
+   RerenderByChangeField: {
+      example: RerenderByChangeField,
+      title: 'Немного записей. Перерисовка при изменении свойства записи.'
    }
 }
 
