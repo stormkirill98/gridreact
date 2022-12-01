@@ -58,21 +58,27 @@ export function getColumnConfigs(children: TColumn | TColumn[]): IColumnConfig[]
    return filteredChildren.map((column) => column.props);
 }
 
-function configsAreEqual(prevConfig: IColumnConfig, nextConfig: IColumnConfig): boolean {
-   return prevConfig.width === nextConfig.width &&
-      prevConfig.displayProperties.length === nextConfig.displayProperties.length;
+function columnIsEqual(prevColumn: IColumnConfig, nextColumn: IColumnConfig): boolean {
+   return prevColumn.width === nextColumn.width &&
+      prevColumn.displayProperties.length === nextColumn.displayProperties.length;
 }
 
-export function columnsAreEqual(prevColumns: TColumn | TColumn[], nextColumns: TColumn | TColumn[]): boolean {
-   const prevConfigs = getColumnConfigs(prevColumns);
-   const nextConfigs = getColumnConfigs(nextColumns);
-
-   if (prevConfigs.length !== nextConfigs.length) {
+// TODO эти сравнения будут отнимать достаточно времени,
+//  а children пересоздается при любой синхронизации прикладного контрола.
+//  В идеале должна быть просто опция columns, которую прикладник будет мемоизировать
+//  и пересоздавать когда ему это точно нужно
+//  Можно поддержать оба варианта, но вот этот будет точно медленне(!!!СДЕЛАТЬ ЗАМЕР!!!)
+export function columnsAreEqual(prevColumns: IColumnConfig[], nextColumns: IColumnConfig[]): boolean {
+   if (!prevColumns || !nextColumns) {
       return false;
    }
 
-   for (let i = 0; i < prevConfigs.length; i++) {
-      if (!configsAreEqual(prevConfigs[i], nextConfigs[i])) {
+   if (prevColumns.length !== nextColumns.length) {
+      return false;
+   }
+
+   for (let i = 0; i < prevColumns.length; i++) {
+      if (!columnIsEqual(prevColumns[i], nextColumns[i])) {
          return false;
       }
    }

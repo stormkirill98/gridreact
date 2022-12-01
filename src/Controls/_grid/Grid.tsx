@@ -1,7 +1,6 @@
-import {ReactElement} from 'react';
+import * as React from 'react';
 import {columnsAreEqual, getColumnConfigs, IColumnConfig, TColumn} from './ColumnConfiguration';
 import {IDataProps, IMarkerProps, IRowEventHandlers} from './interface';
-import * as React from 'react';
 import GridRender from './GridRender';
 
 
@@ -13,29 +12,47 @@ interface IGridProps extends IDataProps, IRowEventHandlers, IMarkerProps {
    children: TColumn | TColumn[];
 }
 
+interface IGridState {
+   columns: IColumnConfig[];
+}
+
 /**
  * Публичный компонент.
- * Его задача дать публичное апи и отсеять все не нужные отрисовки уже на своем уровне.
+ * Его задача дать публичное апи(преобразовать children в columns) и отсеять не нужные отрисовки уже на своем уровне.
  * Ненужные отрисовки: отслеживать изменение конфигурации колонок, обработчики событий.
  * То есть забираем ответственность прикладников на себя, чтобы им не приходилось писать useCallback, useMemo и тд
  * @param props
  * @constructor
  */
-function Grid(props: IGridProps): ReactElement {
-   const columns: IColumnConfig[] = React.useMemo(
-      () => getColumnConfigs(props.children), []
-   );
+export default class Grid extends React.Component<IGridProps, IGridState> {
+   constructor(props: IGridProps) {
+      super(props);
+      this.state = { columns: [] };
+   }
 
-   return <GridRender data={props.data}
-                      keyProperty={props.keyProperty}
-                      columns={columns}
-                      markedKey={props.markedKey}
-                      onRowClick={props.onRowClick}/>;
-}
+   shouldComponentUpdate(nextProps: Readonly<IGridProps>, nextState: Readonly<IGridState>, nextContext: any): boolean {
+      return this.props.keyProperty !== nextProps.keyProperty ||
+         this.props.data !== nextProps.data ||
+         this.props.markedKey !== nextProps.markedKey ||
+         !columnsAreEqual(this.state.columns, getColumnConfigs(nextProps.children));
+   }
 
-function propsAreEqual(prevProps: IGridProps, nextProps: IGridProps): boolean {
-   return prevProps.keyProperty === nextProps.keyProperty &&
-      prevProps.markedKey === nextProps.markedKey &&
-      columnsAreEqual(prevProps.children, nextProps.children);
+   render() {
+      return <GridRender data={this.props.data}
+                         keyProperty={this.props.keyProperty}
+                         columns={this.state.columns}
+                         markedKey={this.props.markedKey}
+                         onRowClick={this.props.onRowClick}/>;
+   }
+
+   static getDerivedStateFromProps(props: IGridProps, state: IGridState): IGridState|null {
+      const newColumnConfig = getColumnConfigs(props.children);
+      if (columnsAreEqual(state.columns, newColumnConfig)) {
+         return null;
+      }
+
+      return {
+         columns: newColumnConfig
+      };
+   }
 }
-export default React.memo(Grid, propsAreEqual);
