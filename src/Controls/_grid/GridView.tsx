@@ -1,8 +1,10 @@
 import './style/Table.css';
 import * as React from 'react';
 import {IColumnConfig, TColumn, isValidColumn} from './ColumnConfiguration';
+import RowComponent from './RowComponent';
+import {memo} from 'react';
 
-interface IGridViewProps<
+interface IGridProps<
    TRowData extends Record<string, any> = Record<string, any>,
    TData extends Array<TRowData> = Array<TRowData>
 > {
@@ -22,7 +24,7 @@ interface IGridViewProps<
    keyProperty: string;
 }
 
-function getStyles(columns: IColumnConfig[], props: IGridViewProps): React.CSSProperties {
+function getStyles(columns: IColumnConfig[], props: IGridProps): React.CSSProperties {
    let gridTemplateColumns = '';
 
    columns.forEach((column) => {
@@ -44,7 +46,7 @@ function getColumns(children: TColumn | TColumn[]): IColumnConfig[] {
    return filteredChildren.map((column) => column.props);
 }
 
-export function GridView(props: IGridViewProps): React.ReactElement {
+function GridView(props: IGridProps): React.ReactElement {
    const columns: IColumnConfig[] = getColumns(props.children);
 
    return (
@@ -52,16 +54,16 @@ export function GridView(props: IGridViewProps): React.ReactElement {
          <div className='table-body'>
             {
                props.data.map((rowData) => (
-                  <div className='table-row' key={rowData[props.keyProperty]}>
-                     {
-                        columns.map((column) => (
-                           <span key={column.displayProperties[0]}>{rowData[column.displayProperties[0]]}</span>
-                        ))
-                     }
-                  </div>
-               ))
+                  <RowComponent key={rowData[props.keyProperty]}
+                                data={rowData}
+                                columns={columns}
+                                keyProperty={props.keyProperty} />
+                  )
+               )
             }
          </div>
       </div>
    );
 }
+
+export default memo(GridView);
