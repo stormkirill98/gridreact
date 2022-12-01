@@ -47,15 +47,26 @@ function isValidColumn(column: TColumn): boolean {
    return validNode;
 }
 
-export function getColumnConfigs(children: TColumn | TColumn[]): IColumnConfig[] {
-   const childrenAsArray = Array.isArray(children) ? children : [children];
-   const filteredChildren = childrenAsArray.filter((node) => isValidColumn(node));
-
-   if (!filteredChildren.length) {
-      throw Error('Empty columns');
+export function getColumnConfigs(columns?: IColumnConfig[], children?: TColumn | TColumn[]): IColumnConfig[] {
+   if (columns) {
+      if (!columns.length) {
+         throw Error('Empty columns');
+      }
+      return columns;
    }
 
-   return filteredChildren.map((column) => column.props);
+   if (children) {
+      const childrenAsArray = Array.isArray(children) ? children : [children];
+      const filteredChildren = childrenAsArray.filter((node) => isValidColumn(node));
+
+      if (!filteredChildren.length) {
+         throw Error('Empty columns');
+      }
+
+      return filteredChildren.map((column) => column.props);
+   }
+
+   throw Error('Should set columns');
 }
 
 function columnIsEqual(prevColumn: IColumnConfig, nextColumn: IColumnConfig): boolean {

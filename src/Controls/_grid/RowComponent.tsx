@@ -11,7 +11,7 @@ interface IRowEventHandlerParams {
    event: SyntheticEvent;
    rowElement: HTMLDivElement|null;
    cellElement: HTMLDivElement|null;
-   rowData: TItem;
+   item: TItem;
    // TODO надо прокидывать
    column?: IColumnConfig;
 }
@@ -35,7 +35,7 @@ function bindRowEventHandler(rowData: TItem, handler?: TRowEventHandler): React.
 
       handler({
          event,
-         rowData,
+         item: rowData,
          rowElement: target.closest('.table-row'),
          cellElement: target.closest('.table-cell')
       })
@@ -49,7 +49,7 @@ function RowComponent(props: IRowProps): ReactElement {
             // TODO нужно валидировать названия полей, т.к. они могут совпасть с названием наших опций.
             const dependentProperties: Record<string, any> = {};
             column.displayProperties.forEach((property) => dependentProperties[property] = props.item[property])
-            return <CellComponent key={column.displayProperties[0]}
+            return <CellComponent key={index}
                                   {...dependentProperties}
                                   config={column}
                                   item={props.item}

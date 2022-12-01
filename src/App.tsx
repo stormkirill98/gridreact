@@ -1,45 +1,50 @@
-import "./styles.css";
-import React, {useCallback} from 'react';
+import './styles.css';
+import React from 'react';
+import Simple from './Examples/Simple';
+import MoreDataColumnsOption from './Examples/MoreDataColumnsOption';
+import MoreDataWithChildren from './Examples/MoreDataWithChildren';
 
-import {
-   Column,
-   Grid,
-   TRowEventHandler
-} from './Controls/grid';
-
-import {IData, TItem} from './Controls/interface/IData';
-
-function generateData(count: Number): IData {
-  const result: TItem[] = [];
-
-  for (let idx = 1; idx <= count; idx++) {
-    result.push({
-      key: idx,
-      a: `cell_${idx}_a`,
-      b: `cell_${idx}_b`,
-      c: `cell_${idx}_c`
-    });
-  }
-
-  return result;
+const EXAMPLES: any = {
+   Simple: {
+      example: Simple,
+      title: 'Простой пример'
+   },
+   MoreDataColumnsOption: {
+      example: MoreDataColumnsOption,
+      title: 'Много записей. Колонки настроены с помощью опции columns.'
+   },
+   MoreDataWithChildren: {
+      example: MoreDataWithChildren,
+      title: 'Много записей. Колонки настроены с помощью children.'
+   }
 }
 
-const TABLE_DATA = generateData(10);
+export default function App(): React.ReactElement {
+   const [Example, setExample] = React.useState(() => Simple);
 
-export default function App() {
-  const [markedKey, setMarkedKey] = React.useState<any>(null);
+   return (
+      <div>
+         <ExampleSelector onChangeExample={(example) => setExample(() => example)}/>
+         <Example/>
+      </div>
+   );
+}
 
-  const onRowClick: TRowEventHandler = useCallback(
-     (params) => setMarkedKey(params.rowData.key), []
-  );
+function ExampleSelector(props: {onChangeExample: (example: React.ReactElement) => void}): React.ReactElement {
+   const [selectedExample, setSelectedExample] = React.useState('Simple');
 
-  return (
-    <div className="App">
-      <Grid data={TABLE_DATA} keyProperty='key' onRowClick={onRowClick} markedKey={markedKey}>
-         <Column displayProperties={['a']} width='1fr' />
-         <Column displayProperties={['b']} width='1fr' />
-         <Column displayProperties={['c']} width='1fr' />
-      </Grid>
-    </div>
-  );
+   const onChange: React.ChangeEventHandler<HTMLSelectElement> = (event) => {
+      setSelectedExample(event.target.value);
+      props.onChangeExample(EXAMPLES[event.target.value].example)
+   }
+   return <select value={selectedExample} onChange={onChange}>
+      {
+         Object.keys(EXAMPLES).map((exampleKey) => (
+               <option key={exampleKey} value={exampleKey} title={EXAMPLES[exampleKey].title}>
+                  {exampleKey}
+               </option>
+            ))
+      }
+   </select>
+
 }

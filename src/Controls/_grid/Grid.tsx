@@ -3,16 +3,15 @@ import {columnsAreEqual, getColumnConfigs, IColumnConfig, TColumn} from './Colum
 import {IDataProps, IMarkerProps, IRowEventHandlers} from './interface';
 import GridRender from './GridRender';
 
-
-
 interface IGridProps extends IDataProps, IRowEventHandlers, IMarkerProps {
    /**
     * Конфигурация колонок
     */
-   children: TColumn | TColumn[];
+   children?: TColumn | TColumn[];
+   columns?: IColumnConfig[];
 }
 
-interface IGridState {
+interface IGridState extends IRowEventHandlers {
    columns: IColumnConfig[];
 }
 
@@ -27,14 +26,19 @@ interface IGridState {
 export default class Grid extends React.Component<IGridProps, IGridState> {
    constructor(props: IGridProps) {
       super(props);
-      this.state = { columns: [] };
+      this.state = {
+         columns: [],
+         // Оборачиваем в коллбэк, чтобы прикладнику не нужно было писать useCallback
+         onRowClick: props.onRowClick ? (params) => props.onRowClick?.(params) : undefined
+      };
    }
 
    shouldComponentUpdate(nextProps: Readonly<IGridProps>, nextState: Readonly<IGridState>, nextContext: any): boolean {
       return this.props.keyProperty !== nextProps.keyProperty ||
          this.props.data !== nextProps.data ||
          this.props.markedKey !== nextProps.markedKey ||
-         !columnsAreEqual(this.state.columns, getColumnConfigs(nextProps.children));
+         this.props.columns !== nextProps.columns ||
+         !!nextProps.children && !columnsAreEqual(this.state.columns, getColumnConfigs(nextProps.columns, nextProps.children));
    }
 
    render() {
@@ -42,16 +46,18 @@ export default class Grid extends React.Component<IGridProps, IGridState> {
                          keyProperty={this.props.keyProperty}
                          columns={this.state.columns}
                          markedKey={this.props.markedKey}
-                         onRowClick={this.props.onRowClick}/>;
+                         onRowClick={this.state.onRowClick}/>;
    }
 
    static getDerivedStateFromProps(props: IGridProps, state: IGridState): IGridState|null {
-      const newColumnConfig = getColumnConfigs(props.children);
-      if (columnsAreEqual(state.columns, newColumnConfig)) {
+      const newColumnConfig = getColumnConfigs(props.columns, props.children);
+      // Сравниваем только если задан children, если задают columns то это задача прикладника
+      if (props.children && columnsAreEqual(state.columns, newColumnConfig)) {
          return null;
       }
 
       return {
+         ...state,
          columns: newColumnConfig
       };
    }
