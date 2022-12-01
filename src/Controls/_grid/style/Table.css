@@ -11,3 +11,7 @@
 .table-head {
   font-weight: bold;
 }
+
+.table-cell-marked {
+  background: indianred;
+}

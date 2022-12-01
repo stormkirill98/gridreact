@@ -1,9 +1,10 @@
 import "./styles.css";
-import {useMemo} from 'react';
+import React, {useCallback} from 'react';
 
 import {
-  Column,
-  GridView,
+   Column,
+   Grid,
+   TRowEventHandler
 } from './Controls/grid';
 
 import {IData, TItem} from './Controls/interface/IData';
@@ -26,13 +27,19 @@ function generateData(count: Number): IData {
 const TABLE_DATA = generateData(10);
 
 export default function App() {
+  const [markedKey, setMarkedKey] = React.useState<any>(null);
+
+  const onRowClick: TRowEventHandler = useCallback(
+     (params) => setMarkedKey(params.rowData.key), []
+  );
+
   return (
     <div className="App">
-      <GridView data={TABLE_DATA} keyProperty='key'>
-         <Column displayProperties={useMemo(() => ['a'], [])} width='1fr' />
-         <Column displayProperties={useMemo(() => ['b'], [])} width='1fr' />
-         <Column displayProperties={useMemo(() => ['c'], [])} width='1fr' />
-      </GridView>
+      <Grid data={TABLE_DATA} keyProperty='key' onRowClick={onRowClick} markedKey={markedKey}>
+         <Column displayProperties={['a']} width='1fr' />
+         <Column displayProperties={['b']} width='1fr' />
+         <Column displayProperties={['c']} width='1fr' />
+      </Grid>
     </div>
   );
 }
