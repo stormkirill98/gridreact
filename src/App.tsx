@@ -32,7 +32,6 @@ export default function App() {
          <Column displayProperties={useMemo(() => ['a'], [])} width='1fr' />
          <Column displayProperties={useMemo(() => ['b'], [])} width='1fr' />
          <Column displayProperties={useMemo(() => ['c'], [])} width='1fr' />
-         <div>1</div>
       </GridView>
     </div>
   );
