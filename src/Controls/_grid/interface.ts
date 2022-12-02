@@ -29,3 +29,7 @@ export interface IMarkerProps {
     */
    markedKey?: TKey;
 }
+
+export interface IEventHandlers<THandler> {
+   onClick?: THandler;
+}

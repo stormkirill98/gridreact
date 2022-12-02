@@ -1,11 +1,11 @@
 import React, {memo, ReactElement, SyntheticEvent} from 'react';
 import {IColumnConfig} from './ColumnConfiguration';
-import CellComponent from './CellComponent';
-import {TItem} from './interface';
+import CellComponent, { CELL_SELECTOR } from './CellComponent';
+import {IEventHandlers, TItem} from './interface';
+import { useForceUpdate } from './utils';
 
-interface IEventHandlers {
-   onClick?: TRowEventHandler;
-}
+const ROW_CLASS_NAME = 'table-row';
+export const ROW_SELECTOR = `.${ROW_CLASS_NAME}`;
 
 interface IRowEventHandlerParams {
    event: SyntheticEvent;
@@ -14,49 +14,41 @@ interface IRowEventHandlerParams {
    item: TItem;
    column?: IColumnConfig;
 }
-
 export type TRowEventHandler = (params: IRowEventHandlerParams) => void;
 
-export interface IRowProps extends IEventHandlers {
+export interface IRowProps extends IEventHandlers<TRowEventHandler> {
    item: TItem;
    columns: IColumnConfig[];
 
    marked: boolean;
 }
 
-function bindRowEventHandler(rowData: TItem, columns: IColumnConfig[], handler?: TRowEventHandler): React.ReactEventHandler|undefined {
+function getRowEventHandler(rowData: TItem, columns: IColumnConfig[], handler?: TRowEventHandler): React.ReactEventHandler|undefined {
    if (!handler) {
       return undefined;
    }
 
    return (event) => {
       const target = event.target as HTMLDivElement;
-      const rowElement: HTMLDivElement|null = target.closest('.table-row');
-      const cellElement: HTMLDivElement|null = target.closest('.table-cell');
-      const cellIndex = rowElement?.childNodes && cellElement
-          ? Array.from(rowElement?.childNodes).findIndex((it) => it === cellElement)
-          : -1;
-      const column = columns[cellIndex];
+      const rowElement: HTMLDivElement|null = target.closest(ROW_SELECTOR);
+      const cellElement: HTMLDivElement|null = target.closest(CELL_SELECTOR);
+      const cellIndex = Array.from(rowElement?.childNodes || []).findIndex((it) => it === cellElement);
       handler({
          event,
          item: rowData,
+         column: columns[cellIndex],
          rowElement,
-         cellElement,
-         column
+         cellElement
       })
    }
 }
 
-function useForceUpdate(){
-   const [_, setValue] = React.useState(0); // integer state
-   return () => setValue(value => value + 1); // update state to force render
-}
-
 function RowComponent(props: IRowProps): ReactElement {
+   // Мы будем слушать изменение рекорда и положим в опции версию итема, чтобы нативно сработало перерисовка
    const forceUpdate = useForceUpdate();
-   props.item.setChangeCallback(((field, value) => forceUpdate()));
+   props.item.setChangeCallback((() => forceUpdate()));
 
-   return <div className='table-row' onClick={bindRowEventHandler(props.item, props.columns, props.onClick)}>
+   return <div className={ROW_CLASS_NAME} onClick={getRowEventHandler(props.item, props.columns, props.onClick)}>
       {
          props.columns.map((column, index) => {
             // TODO нужно валидировать названия полей, т.к. они могут совпасть с названием наших опций.

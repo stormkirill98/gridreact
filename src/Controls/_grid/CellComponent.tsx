@@ -2,6 +2,9 @@ import {memo, ReactElement} from 'react';
 import {IColumnConfig} from './ColumnConfiguration';
 import {TItem} from './interface';
 
+const CELL_CLASS_NAME = 'table-cell';
+export const CELL_SELECTOR = `.${CELL_CLASS_NAME}`;
+
 /**
  * Интерфейс опций ячейки
  * @remark
@@ -17,7 +20,7 @@ interface ICellProps extends Record<string, any> {
 }
 
 function getClassName(props: ICellProps): string {
-   let className = 'table-cell';
+   let className = CELL_CLASS_NAME;
    if (props.marked) {
       className += ' table-cell-marked';
    }
