@@ -1,7 +1,7 @@
 import React, {memo, ReactElement, SyntheticEvent} from 'react';
 import {IColumnConfig} from './ColumnConfiguration';
 import CellComponent, { CELL_SELECTOR } from './CellComponent';
-import {IEventHandlers, TItem} from './interface';
+import {IEventHandlers, ISelectionProps, TItem} from './interface';
 import { useForceUpdate } from './utils';
 
 const ROW_CLASS_NAME = 'table-row';
@@ -16,7 +16,7 @@ interface IRowEventHandlerParams {
 }
 export type TRowEventHandler = (params: IRowEventHandlerParams) => void;
 
-export interface IRowProps extends IEventHandlers<TRowEventHandler> {
+export interface IRowProps extends IEventHandlers<TRowEventHandler>, ISelectionProps {
    item: TItem;
    columns: IColumnConfig[];
 
@@ -48,7 +48,10 @@ function RowComponent(props: IRowProps): ReactElement {
    const forceUpdate = useForceUpdate();
    props.item.setChangeCallback((() => forceUpdate()));
 
+   const checkbox = props.selectionVisibility === 'visible' ? <input type={'checkbox'}/> : null;
+
    return <div className={ROW_CLASS_NAME} onClick={getRowEventHandler(props.item, props.columns, props.onClick)}>
+      {checkbox}
       {
          props.columns.map((column, index) => {
             // TODO нужно валидировать названия полей, т.к. они могут совпасть с названием наших опций.

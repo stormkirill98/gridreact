@@ -1,5 +1,6 @@
 import {TRowEventHandler} from './RowComponent';
 import {Item} from "../interface/IData";
+import {TVisibility} from '../interface/TGeneral';
 
 export type TItem = Item;
 export type TKey = string|number|null;
@@ -28,6 +29,10 @@ export interface IMarkerProps {
     * Ключ маркированной записи.
     */
    markedKey?: TKey;
+}
+
+export interface ISelectionProps {
+   selectionVisibility?: TVisibility;
 }
 
 export interface IEventHandlers<THandler> {

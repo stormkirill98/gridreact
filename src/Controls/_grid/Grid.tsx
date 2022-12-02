@@ -1,9 +1,9 @@
 import * as React from 'react';
 import {columnsAreEqual, getColumnConfigs, IColumnConfig, TColumn} from './ColumnConfiguration';
-import {IDataProps, IMarkerProps, IRowEventHandlers} from './interface';
+import {IDataProps, IMarkerProps, IRowEventHandlers, ISelectionProps} from './interface';
 import GridRender from './GridRender';
 
-interface IGridProps extends IDataProps, IRowEventHandlers, IMarkerProps {
+interface IGridProps extends IDataProps, IRowEventHandlers, IMarkerProps, ISelectionProps {
    /**
     * Конфигурация колонок
     */
@@ -37,6 +37,7 @@ export default class Grid extends React.Component<IGridProps, IGridState> {
       return this.props.keyProperty !== nextProps.keyProperty ||
          this.props.data !== nextProps.data ||
          this.props.markedKey !== nextProps.markedKey ||
+         this.props.selectionVisibility !== nextProps.selectionVisibility ||
          this.props.columns !== nextProps.columns ||
          !!nextProps.children && !columnsAreEqual(this.state.columns, getColumnConfigs(nextProps.columns, nextProps.children));
    }
@@ -46,6 +47,7 @@ export default class Grid extends React.Component<IGridProps, IGridState> {
                          keyProperty={this.props.keyProperty}
                          columns={this.state.columns}
                          markedKey={this.props.markedKey}
+                         selectionVisibility={this.props.selectionVisibility}
                          onRowClick={this.state.onRowClick}/>;
    }
 

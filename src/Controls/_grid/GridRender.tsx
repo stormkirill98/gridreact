@@ -2,18 +2,22 @@ import './style/Table.css';
 import * as React from 'react';
 import {IColumnConfig} from './ColumnConfiguration';
 import RowComponent from './RowComponent';
-import {IDataProps, IMarkerProps, IRowEventHandlers} from './interface';
+import {IDataProps, IMarkerProps, IRowEventHandlers, ISelectionProps} from './interface';
 
-interface IRenderProps extends IDataProps, IRowEventHandlers, IMarkerProps {
+interface IRenderProps extends IDataProps, IRowEventHandlers, IMarkerProps, ISelectionProps {
    columns: IColumnConfig[];
 }
 
 function getStyles(columns: IColumnConfig[], props: IRenderProps): React.CSSProperties {
    let gridTemplateColumns = '';
 
+   if (props.selectionVisibility === 'visible') {
+      gridTemplateColumns += ' 30px';
+   }
+
    columns.forEach((column) => {
       const {width = 'auto'} = column;
-      gridTemplateColumns += `${width} `;
+      gridTemplateColumns += ` ${width}`;
    });
 
    return { gridTemplateColumns };
@@ -31,6 +35,7 @@ function GridRender(props: IRenderProps): React.ReactElement {
                                        columns={props.columns}
 
                                        marked={props.markedKey === key}
+                                       selectionVisibility={props.selectionVisibility}
 
                                        onClick={props.onRowClick}
                   />;
