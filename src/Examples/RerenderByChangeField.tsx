@@ -27,9 +27,11 @@ export default function RerenderByChangeField(): React.ReactElement {
       }
    }
    return (
-      <div className="App">
-         <button onClick={() => changeFields(selectedColumn?.displayProperties)}>{`Change fields "${selectedColumn?.displayProperties?.join(', ')}" in item "${markedKey}"`}</button>
-         <button onClick={() => changeFields(undefined)}>{`Change all fields in item "${markedKey}"`}</button>
+      <div>
+         <div>
+            <button onClick={() => changeFields(selectedColumn?.displayProperties)}>{`Change fields "${selectedColumn?.displayProperties?.join(', ')}" in item "${markedKey}"`}</button>
+            <button onClick={() => changeFields(undefined)}>{`Change all fields in item "${markedKey}"`}</button>
+         </div>
          <Grid data={TABLE_DATA} keyProperty='key' onRowClick={onRowClick} markedKey={markedKey}>
             <Column displayProperties={['a']} width='1fr' />
             <Column displayProperties={['b']} width='1fr' />

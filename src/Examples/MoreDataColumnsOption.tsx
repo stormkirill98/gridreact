@@ -10,8 +10,6 @@ export default function MoreDataColumnsOption(): React.ReactElement {
 
    const onRowClick: TRowEventHandler = (params) => setMarkedKey(params.item.get('key'));
    return (
-      <div className="App">
-         <Grid data={TABLE_DATA} keyProperty='key' columns={COLUMNS} onRowClick={onRowClick} markedKey={markedKey}/>
-      </div>
+      <Grid data={TABLE_DATA} keyProperty='key' columns={COLUMNS} onRowClick={onRowClick} markedKey={markedKey}/>
    );
 }

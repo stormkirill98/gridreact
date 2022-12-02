@@ -9,14 +9,12 @@ export default function Simple(): React.ReactElement {
 
    const onRowClick: TRowEventHandler = (params) => setMarkedKey(params.item.get('key'));
    return (
-      <div className="App">
-         <Grid data={TABLE_DATA} keyProperty='key' onRowClick={onRowClick} markedKey={markedKey}>
-            <Column displayProperties={['a']} width='1fr' />
-            <Column displayProperties={['b']} width='1fr' />
-            <Column displayProperties={['c']} width='1fr' />
-            <Column displayProperties={['d']} width='1fr' />
-            <Column displayProperties={['e']} width='1fr' />
-         </Grid>
-      </div>
+      <Grid data={TABLE_DATA} keyProperty='key' onRowClick={onRowClick} markedKey={markedKey}>
+         <Column displayProperties={['a']} width='1fr' />
+         <Column displayProperties={['b']} width='1fr' />
+         <Column displayProperties={['c']} width='1fr' />
+         <Column displayProperties={['d']} width='1fr' />
+         <Column displayProperties={['e']} width='1fr' />
+      </Grid>
    );
 }
