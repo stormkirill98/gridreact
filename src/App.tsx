@@ -29,8 +29,10 @@ const EXAMPLES: any = {
    }
 }
 
+const DEFAULT_EXAMPLE = 'Simple';
+
 export default function App(): React.ReactElement {
-   const [Example, setExample] = React.useState(() => Simple);
+   const [Example, setExample] = React.useState(() => EXAMPLES[DEFAULT_EXAMPLE]);
 
    return (
       <div>
@@ -41,7 +43,7 @@ export default function App(): React.ReactElement {
 }
 
 function ExampleSelector(props: {onChangeExample: (example: React.ReactElement) => void}): React.ReactElement {
-   const [selectedExample, setSelectedExample] = React.useState('Simple');
+   const [selectedExample, setSelectedExample] = React.useState(DEFAULT_EXAMPLE);
 
    const onChange: React.ChangeEventHandler<HTMLSelectElement> = (event) => {
       setSelectedExample(event.target.value);
