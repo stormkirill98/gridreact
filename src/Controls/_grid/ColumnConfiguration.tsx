@@ -1,5 +1,21 @@
 import {ReactElement} from 'react';
 import * as React from 'react';
+import {TItem} from './interface';
+
+export interface ICellRenderParams {
+   item: TItem;
+   config: IColumnConfig;
+}
+
+export type TCellValueRender = (params: ICellRenderParams) => string;
+/**
+ * Тип кастомного рендера ячейки
+ * Обязательно задаем MemoExoticComponent, чтобы прикладники обязательно мемоизировали контент.
+ * Делаем это для того, чтобы не было лишних перерисовок контента.
+ * Например, если мы отрисовали маркер на своем уровне, то ячейка у прикладников не должна перерисоваться
+ */
+export type TCellContentRender = React.MemoExoticComponent<React.ComponentType<ICellRenderParams>>;
+export type TCellRender = TCellContentRender | TCellValueRender;
 
 /**
  * Конфигурация колонки
@@ -7,14 +23,17 @@ import * as React from 'react';
 export interface IColumnConfig {
    /**
     * Свойства записи, которые используются для отрисовки этой ячейки.
-    * Только при их изменении будет перерисована ячейка этой колонки
+    * Только при их изменении будет перерисована ячейка этой колонки.
+    * Для дефолтного отображения используется первое свойство.
     */
    displayProperties: string[];
 
    /**
     * Ширина колонки.
     */
-   width: string;
+   width?: string;
+
+   render?: TCellRender;
 }
 
 export type TColumn = ReactElement<IColumnConfig>;

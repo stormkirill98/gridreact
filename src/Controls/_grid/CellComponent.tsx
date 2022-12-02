@@ -1,6 +1,7 @@
 import {memo, ReactElement} from 'react';
-import {IColumnConfig} from './ColumnConfiguration';
+import {IColumnConfig, TCellContentRender} from './ColumnConfiguration';
 import {TItem} from './interface';
+import * as React from 'react';
 
 const CELL_CLASS_NAME = 'table-cell';
 export const CELL_SELECTOR = `.${CELL_CLASS_NAME}`;
@@ -27,10 +28,22 @@ function getClassName(props: ICellProps): string {
    return className;
 }
 
+function getContent(props: ICellProps): string | ReactElement {
+   if (typeof props.config.render === 'function') {
+      return props.config.render({config: props.config, item: props.item});
+   }
+
+   if (props.config.render) {
+      const Render = props.config.render as TCellContentRender;
+      return <Render item={props.item} config={props.config} />
+   }
+
+   return props.item.get(props.config.displayProperties[0]);
+}
+
 function CellComponent(props: ICellProps): ReactElement {
-   const displayValue = props.item.get(props.config.displayProperties[0]);
    return <span className={getClassName(props)}>
-      {displayValue}
+      {getContent(props)}
    </span>;
 }
 

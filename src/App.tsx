@@ -1,10 +1,12 @@
 import './styles.css';
+import './Examples/styles.css';
 import React from 'react';
 import Simple from './Examples/Simple';
 import MoreDataColumnsOption from './Examples/MoreDataColumnsOption';
 import MoreDataWithChildren from './Examples/MoreDataWithChildren';
 import RerenderByChangeField from "./Examples/RerenderByChangeField";
 import SelectionVisibility from './Examples/SelectionVisibility';
+import CustomCellRender from './Examples/CustomCellRender';
 
 const EXAMPLES: any = {
    Simple: {
@@ -21,18 +23,22 @@ const EXAMPLES: any = {
    },
    RerenderByChangeField: {
       example: RerenderByChangeField,
-      title: 'Немного записей. Перерисовка при изменении свойства записи.'
+      title: 'Перерисовка при изменении свойства записи.'
    },
    SelectionVisibility: {
       example: SelectionVisibility,
-      title: 'Немного записей. Показ и скрытие колонки с чекбоксами.'
+      title: 'Показ и скрытие колонки с чекбоксами.'
+   },
+   CustomCellRender: {
+      example: CustomCellRender,
+      title: 'Кастомные рендеры контента ячеек.'
    }
 }
 
 const DEFAULT_EXAMPLE = 'Simple';
 
 export default function App(): React.ReactElement {
-   const [Example, setExample] = React.useState(() => EXAMPLES[DEFAULT_EXAMPLE]);
+   const [Example, setExample] = React.useState(() => EXAMPLES[DEFAULT_EXAMPLE].example);
 
    return (
       <div>

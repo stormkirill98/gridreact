@@ -1,0 +1,11 @@
+.cell-bold {
+  font-weight: bold;
+}
+
+.cell-border {
+  border-style: solid;
+}
+
+.content-center {
+  text-align: center;
+}
