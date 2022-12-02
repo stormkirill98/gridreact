@@ -28,11 +28,12 @@ function GridRender(props: IRenderProps): React.ReactElement {
       <div style={getStyles(props.columns, props)} className='table'>
          <div className='table-body'>
             {
-               props.data.map((rowData) => {
-                  const key = rowData.get(props.keyProperty);
+               props.data.map((item) => {
+                  const key = item.get(props.keyProperty);
                   return <RowComponent key={key}
-                                       item={rowData}
+                                       item={item}
                                        columns={props.columns}
+                                       itemVersion={item.getVersion()}
 
                                        marked={props.markedKey === key}
                                        selectionVisibility={props.selectionVisibility}

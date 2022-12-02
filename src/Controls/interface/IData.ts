@@ -9,20 +9,18 @@ export type TItem = Item;
 
 export type IData = TItem[];
 
-type TChangeCallback = (field: string, value: any) => void;
-
 export class Item {
   private _data: Record<string, any>;
-  private _onChangeCallback: TChangeCallback | null = null;
+  private _version: number = 0;
 
   constructor(data: Record<string, any>) {
     this._data = data;
   }
 
   set(field: string, value: any): void {
-    this._data[field] = value;
-    if (this._onChangeCallback) {
-      this._onChangeCallback(field, value);
+    if (this._data[field] !== value) {
+      this._data[field] = value;
+      this._version++;
     }
   }
 
@@ -30,7 +28,7 @@ export class Item {
     return this._data[field];
   }
 
-  setChangeCallback(callback: TChangeCallback): void {
-    this._onChangeCallback = callback;
+  getVersion(): number {
+    return this._version;
   }
 }

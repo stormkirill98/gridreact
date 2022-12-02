@@ -2,7 +2,6 @@ import React, {memo, ReactElement, SyntheticEvent} from 'react';
 import {IColumnConfig} from './ColumnConfiguration';
 import CellComponent, { CELL_SELECTOR } from './CellComponent';
 import {IEventHandlers, ISelectionProps, TItem} from './interface';
-import { useForceUpdate } from './utils';
 
 const ROW_CLASS_NAME = 'table-row';
 export const ROW_SELECTOR = `.${ROW_CLASS_NAME}`;
@@ -18,6 +17,10 @@ export type TRowEventHandler = (params: IRowEventHandlerParams) => void;
 
 export interface IRowProps extends IEventHandlers<TRowEventHandler>, ISelectionProps {
    item: TItem;
+   /**
+    * Опция нужна для корректной перерисовки
+    */
+   itemVersion: number;
    columns: IColumnConfig[];
 
    marked: boolean;
@@ -44,10 +47,6 @@ function getRowEventHandler(rowData: TItem, columns: IColumnConfig[], handler?: 
 }
 
 function RowComponent(props: IRowProps): ReactElement {
-   // Мы будем слушать изменение рекорда и положим в опции версию итема, чтобы нативно сработало перерисовка
-   const forceUpdate = useForceUpdate();
-   props.item.setChangeCallback((() => forceUpdate()));
-
    const checkbox = props.selectionVisibility === 'visible' ? <input type={'checkbox'}/> : null;
 
    return <div className={ROW_CLASS_NAME} onClick={getRowEventHandler(props.item, props.columns, props.onClick)}>
