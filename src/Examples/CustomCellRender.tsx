@@ -1,10 +1,8 @@
-import React, {ReactElement} from 'react';
-import {Column, Grid, ICellRenderParams, TRowEventHandler} from '../Controls/grid';
+import React from 'react';
+import {Column, Grid, ICellRenderParams} from '../Controls/grid';
 import TaskRender from './CellRenders/TaskRender';
 
-import {generateData} from './Data';
-import {useMarker, useSelection} from './utils';
-const TABLE_DATA = generateData(20);
+import {useChangeData, useSelection} from './utils';
 
 function BoldText(params: ICellRenderParams): React.ReactElement {
    const displayProperty = params.config.displayProperties[0];
@@ -22,16 +20,19 @@ function BorderCell(params: ICellRenderParams): React.ReactElement {
 
 function CustomText(params: ICellRenderParams): string {
    const displayProperty = params.config.displayProperties[0];
-   return `${displayProperty} custom`
+   const displayValue = params.item.get(displayProperty);
+   return `customize value ${displayValue}`
 }
 
 export default function CustomCellRender(): React.ReactElement {
-   const markerProps = useMarker();
+   const {data, buttons, markedKey, onRowClick} = useChangeData();
    const {selectionVisibility, toggleButton} = useSelection();
+
    return (
       <div>
          {toggleButton}
-         <Grid data={TABLE_DATA} keyProperty='key' {...markerProps} selectionVisibility={selectionVisibility}>
+         {buttons}
+         <Grid data={data} keyProperty='key' markedKey={markedKey} onRowClick={onRowClick} selectionVisibility={selectionVisibility}>
             <Column displayProperties={['a']} width='1fr' render={React.memo(BoldText)}/>
             <Column displayProperties={['b']} width='1fr' render={React.memo(BorderCell)}/>
             <Column displayProperties={['c']} width='1fr' render={CustomText}/>

@@ -30,12 +30,14 @@ function getClassName(props: ICellProps): string {
 
 function getContent(props: ICellProps): string | ReactElement {
    if (typeof props.config.render === 'function') {
-      return props.config.render({config: props.config, item: props.item});
+      const dependentValues = getCellDependentValues(props.config, props.item);
+      return props.config.render({...dependentValues, config: props.config, item: props.item});
    }
 
    if (props.config.render) {
+      const dependentValues = getCellDependentValues(props.config, props.item);
       const Render = props.config.render as TCellContentRender;
-      return <Render item={props.item} config={props.config} />
+      return <Render {...dependentValues} item={props.item} config={props.config} />
    }
 
    return props.item.get(props.config.displayProperties[0]);
@@ -48,3 +50,9 @@ function CellComponent(props: ICellProps): ReactElement {
 }
 
 export default memo(CellComponent);
+
+export function getCellDependentValues(column: IColumnConfig, item: TItem): Record<string, unknown> {
+   const dependentValues: Record<string, any> = {};
+   column.displayProperties.forEach((property) => dependentValues[property] = item.get(property))
+   return dependentValues;
+}

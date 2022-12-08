@@ -1,6 +1,6 @@
 import React, {memo, ReactElement, SyntheticEvent} from 'react';
 import {IColumnConfig} from './ColumnConfiguration';
-import CellComponent, { CELL_SELECTOR } from './CellComponent';
+import CellComponent, {CELL_SELECTOR, getCellDependentValues} from './CellComponent';
 import {IEventHandlers, ISelectionProps, TItem} from './interface';
 
 const ROW_CLASS_NAME = 'table-row';
@@ -54,10 +54,9 @@ function RowComponent(props: IRowProps): ReactElement {
       {
          props.columns.map((column, index) => {
             // TODO нужно валидировать названия полей, т.к. они могут совпасть с названием наших опций.
-            const dependentProperties: Record<string, any> = {};
-            column.displayProperties.forEach((property) => dependentProperties[property] = props.item.get(property))
+            const dependentValues = getCellDependentValues(column, props.item);
             return <CellComponent key={index}
-                                  {...dependentProperties}
+                                  {...dependentValues}
                                   config={column}
                                   item={props.item}
                                   marked={props.marked && index === 0}
