@@ -1,74 +1,43 @@
 import "./styles.css";
-import {ReactElement, useMemo, useState} from 'react';
+import React from 'react';
+import {Grid, ICellContentRenderProps, IColumnConfig } from "./grid";
 
-import {
-  GridView,
-  ItemComponent,
-  IItemComponentProps,
-  CellComponent,
-  ICellComponentProps,
-} from "./Grid/Grid";
+function generateData(count: Number): Record<string, string>[] {
+   const result: Record<string, string>[] = [];
 
-import {IData, TItem} from './interface/IData';
-import { IColumnConfig } from "./Grid/Cell/interface";
-import {IItemEventHandlers} from './Grid/GridView';
+   for (let idx = 1; idx <= count; idx++) {
+      result.push({
+         key: `${idx}`,
+         a: `cell_${idx}_a`,
+         b: `cell_${idx}_b`,
+         c: `cell_${idx}_c`,
+         d: `cell_${idx}_d`,
+         e: `cell_${idx}_e`
+      });
+   }
 
-function generateData(count: Number): IData {
-  const result: TItem[] = [];
-
-  for (let idx = 1; idx <= count; idx++) {
-    result.push({
-      key: idx,
-      a: `cell_${idx}_a`,
-      b: `cell_${idx}_b`,
-      c: `cell_${idx}_c`,
-      fontWeight: idx % 3 === 0 ? "bold" : undefined,
-    });
-  }
-
-  return result;
-}
-
-function MyItemComponent(props: IItemComponentProps): ReactElement {
-  return <ItemComponent fontWeight={props.item.fontWeight}/>;
-}
-
-interface ICellTemplateOptions {
-  addedDisplayValue: string;
-}
-
-function MyCellComponent(props: ICellComponentProps): ReactElement {
-  const displayValue = "custom_" + props.item?.c;
-  return <CellComponent displayValue={displayValue} />;
+   return result;
 }
 
 const TABLE_DATA = generateData(10);
 const COLUMNS: IColumnConfig[] = [
-  { width: "1fr", displayProperty: "a" },
-  { width: "1fr", displayProperty: "b" },
-  {
-    width: "1fr",
-    displayProperty: "c",
-    CellComponent: MyCellComponent,
-    templateOptions: { addedDisplayValue: "123" },
-  },
+   { width: "1fr", dependentProperties: ["a"] },
+   { width: "1fr", dependentProperties: ["b"] },
+   { width: "1fr", dependentProperties: ["c", 'd'], render: CustomCellRender },
 ];
 
-export default function App() {
-  const [markedKey, setMarkedKey] = useState(1);
+function CustomCellRender(props: ICellContentRenderProps): React.ReactElement {
+   return (
+      <div>
+         {`${props.item.c} ${props.item.d}`}
+      </div>
+   );
+}
 
-  const handlers: IItemEventHandlers = useMemo(() => ({
-    onClick: (event, item) => item.key && setMarkedKey(item.key),
-  }), []);
-  return (
-    <div className="App">
-      <GridView
-        items={TABLE_DATA}
-        columns={COLUMNS}
-        handlers={handlers}
-        ItemComponent={MyItemComponent}
-        markedKey={markedKey}
-      />
-    </div>
-  );
+export default function App() {
+   return (
+      <div className="App">
+         <Grid keyProperty={'key'} items={TABLE_DATA} columns={COLUMNS} />
+      </div>
+   );
 }
