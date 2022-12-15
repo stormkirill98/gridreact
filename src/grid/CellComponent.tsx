@@ -4,6 +4,8 @@ export type TCellRender<TRenderProps = any> = React.FunctionComponent<ICellConte
 
 export type TRenderValue = Record<string, any>;
 
+export type TGetCellRenderPropsCallback = (column: IColumnConfig, item: Record<string, string>) => any;
+
 /**
  * Конфигурация колонки
  */
@@ -37,13 +39,16 @@ interface ICellComponentProps {
    item: Record<string, string>;
    column: IColumnConfig;
    renderValue: TRenderValue;
+   cellRenderProps?: any;
 }
 
 function CellComponent(props: ICellComponentProps): React.ReactElement {
    let content: string | React.ReactElement;
 
    if (props.column.render) {
-      content = <props.column.render item={props.item} renderProps={props.column.renderProps} renderValue={props.renderValue}/>;
+      content = <props.column.render item={props.item}
+                                     renderProps={props.cellRenderProps || props.column.renderProps}
+                                     renderValue={props.renderValue}/>;
    } else {
       const displayProperty = typeof props.column.displayProperty === 'string'
          ? props.column.displayProperty

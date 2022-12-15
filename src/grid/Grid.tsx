@@ -1,11 +1,13 @@
 import React from 'react';
 import RowComponent from './RowComponent';
-import {IColumnConfig, TRenderValue} from './CellComponent';
+import {IColumnConfig, TGetCellRenderPropsCallback, TRenderValue} from './CellComponent';
 
 interface IGridProps {
    items: Record<string, string>[];
    columns: IColumnConfig[];
    keyProperty: string;
+
+   getCellRenderProps?: TGetCellRenderPropsCallback;
 }
 
 function getRowRenderValue(columns: IColumnConfig[], item: Record<string, string>): TRenderValue {
@@ -43,6 +45,7 @@ function Grid(props: IGridProps): React.ReactElement {
                                     columns={props.columns}
                                     item={item}
                                     renderValue={renderValue}
+                                    getCellRenderProps={props.getCellRenderProps}
                />;
             })
          }

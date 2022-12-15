@@ -20,9 +20,9 @@ export function generateData(count: Number): Record<string, string>[] {
 export function generateColumns(cellRender?: TCellRender<CustomCellProps>,
                                 cellRenderProps?: CustomCellProps): IColumnConfig<CustomCellProps>[] {
    return [
-      { width: "1fr", displayProperty: ["a"] },
-      { width: "1fr", displayProperty: ["b"] },
-      { width: "1fr", displayProperty: ["c", 'd'], render: cellRender, renderProps: cellRenderProps },
+      { width: "1fr", displayProperty: 'a' },
+      { width: "1fr", displayProperty: 'b' },
+      { width: "1fr", displayProperty: 'c', render: cellRender, renderProps: cellRenderProps },
    ]
 }
 
