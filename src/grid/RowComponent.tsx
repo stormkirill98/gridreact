@@ -1,35 +1,41 @@
 import React from 'react';
-import CellComponent, { IColumnConfig } from './CellComponent';
+import CellComponent, {IColumnConfig, TRenderValue} from './CellComponent';
 
 interface IRowComponentProps {
    columns: IColumnConfig[];
    item: Record<string, any>;
-   dependentValues: Record<string, any>;
+   renderValue: TRenderValue;
 }
 
-function getCellDependentValues(column: IColumnConfig, item: Record<string, string>): Record<string, string> {
-   const dependentValues: Record<string, string> = {};
+function getCellRenderValue(column: IColumnConfig, item: Record<string, string>): TRenderValue {
+   const renderValue: TRenderValue = {};
 
-   column.dependentProperties.forEach((dependentProperty) => {
-      dependentValues[dependentProperty] = item[dependentProperty];
+   const properties = typeof column.displayProperty === 'string' ? [column.displayProperty] : column.displayProperty;
+   properties.forEach((property) => {
+      renderValue[property] = item[property];
    })
 
-   return dependentValues;
-
+   return renderValue;
 }
+
+// TODO Нужно для мемоизации renderValue, в нашей структуре это не пригодится, мемоизация будет на уровне коллекции
+//  то есть на уровне коллекции мы просто не изменим объект, если не изменился displayProperty
+function CellWrapper(props: {column: IColumnConfig, item: Record<string, string>}): React.ReactElement {
+   const renderValue = React.useMemo(
+      () => getCellRenderValue(props.column, props.item),
+      [props.column.displayProperty]
+   );
+   return <CellComponent column={props.column}
+                         item={props.item}
+                         renderValue={renderValue}/>
+}
+const CellWrapperMemo = React.memo(CellWrapper);
 
 function RowComponent(props: IRowComponentProps): React.ReactElement {
    return (
       <div className='grid-row'>
          {
-            props.columns.map((column) => {
-               const keyProperty = column.dependentProperties[0];
-               const dependentValues = getCellDependentValues(column, props.item);
-               return <CellComponent key={keyProperty}
-                                     column={column}
-                                     item={props.item}
-                                     dependentValues={dependentValues}/>
-            })
+            props.columns.map((column) => <CellWrapperMemo key={column.displayProperty[0]} column={column} item={props.item}/>)
          }
       </div>
    );

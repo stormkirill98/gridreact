@@ -3,6 +3,10 @@
   text-align: center;
 }
 
+.App > div {
+  margin-top: 20px;
+}
+
 .grid {
   display: grid;
 }

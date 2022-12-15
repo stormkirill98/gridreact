@@ -1,5 +1,4 @@
-import {ICellContentRenderProps, IColumnConfig} from '../grid';
-import React from 'react';
+import {IColumnConfig, TCellRender} from '../grid';
 
 export function generateData(count: Number): Record<string, string>[] {
    const result: Record<string, string>[] = [];
@@ -18,10 +17,16 @@ export function generateData(count: Number): Record<string, string>[] {
    return result;
 }
 
-export function generateColumns(cellRender?: React.FunctionComponent<ICellContentRenderProps>): IColumnConfig[] {
+export function generateColumns(cellRender?: TCellRender<CustomCellProps>,
+                                cellRenderProps?: CustomCellProps): IColumnConfig<CustomCellProps>[] {
    return [
-      { width: "1fr", dependentProperties: ["a"] },
-      { width: "1fr", dependentProperties: ["b"] },
-      { width: "1fr", dependentProperties: ["c", 'd'], render: cellRender },
+      { width: "1fr", displayProperty: ["a"] },
+      { width: "1fr", displayProperty: ["b"] },
+      { width: "1fr", displayProperty: ["c", 'd'], render: cellRender, renderProps: cellRenderProps },
    ]
 }
+
+export interface CustomCellProps {
+   displayButton: boolean;
+}
+export const DEFAULT_CUSTOM_CELL_PROPS = {displayButton: false};

@@ -1,6 +1,6 @@
 import React from 'react';
 import RowComponent from './RowComponent';
-import { IColumnConfig } from './CellComponent';
+import {IColumnConfig, TRenderValue} from './CellComponent';
 
 interface IGridProps {
    items: Record<string, string>[];
@@ -8,16 +8,17 @@ interface IGridProps {
    keyProperty: string;
 }
 
-function getRowDependentValues(columns: IColumnConfig[], item: Record<string, string>): Record<string, string> {
-   const dependentValues: Record<string, string> = {};
+function getRowRenderValue(columns: IColumnConfig[], item: Record<string, string>): TRenderValue {
+   const renderValue: TRenderValue = {};
 
    columns.forEach((column) => {
-      column.dependentProperties.forEach((dependentProperty) => {
-         dependentValues[dependentProperty] = item[dependentProperty];
+      const properties = typeof column.displayProperty === 'string' ? [column.displayProperty] : column.displayProperty;
+      properties.forEach((property) => {
+         renderValue[property] = item[property];
       })
    })
 
-   return dependentValues;
+   return renderValue;
 }
 
 function getStyles(columns: IColumnConfig[]): React.CSSProperties {
@@ -37,11 +38,11 @@ function Grid(props: IGridProps): React.ReactElement {
          {
             props.items.map((item) => {
                const key = item[props.keyProperty];
-               const dependentValues = getRowDependentValues(props.columns, item);
+               const renderValue = getRowRenderValue(props.columns, item);
                return <RowComponent key={key}
                                     columns={props.columns}
                                     item={item}
-                                    dependentValues={dependentValues}
+                                    renderValue={renderValue}
                />;
             })
          }

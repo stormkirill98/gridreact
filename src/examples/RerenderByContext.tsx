@@ -1,18 +1,8 @@
 import React from 'react';
-import {generateColumns, generateData} from './utils';
+import {CustomCellProps, DEFAULT_CUSTOM_CELL_PROPS, generateColumns, generateData} from './utils';
 import {Grid, ICellContentRenderProps} from '../grid';
 
-interface CustomCellProps {
-   displayButton: boolean;
-}
-const DEFAULT_CUSTOM_CELL_PROPS = {displayButton: false};
-
-
-// region Context
-
 const CustomCellContext = React.createContext<CustomCellProps>(DEFAULT_CUSTOM_CELL_PROPS);
-
-// endregion Context
 
 function CustomCellRender(props: ICellContentRenderProps): React.ReactElement {
    const customCellProps = React.useContext(CustomCellContext);
