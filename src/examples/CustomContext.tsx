@@ -7,6 +7,19 @@ import {
 } from "./utils";
 import { Grid, ICellContentRenderProps } from "../grid";
 
+const COMMENT = `
+Плюсы:
+   1. Быстрая перерисовка, не затрагивает список
+   2. Минимум кода(вместе взятого - нашего и прикладного)
+   3. Полностью на рельсах реакта
+   
+Минусы:
+   1. Не известно что прикладники наговнят и как с этим бороться
+   
+Вопросы:
+   1. Нужно подумать над кейсом - синхронная отрисовка загруженных записей и измененной прикладной опции
+`;
+
 const CustomCellContext = React.createContext<CustomCellProps>(
   DEFAULT_CUSTOM_CELL_PROPS
 );
@@ -38,7 +51,7 @@ export default function CustomContext(): React.ReactElement {
 
   return (
     <div>
-      <div>
+      <div title={COMMENT}>
         <b>
           Перерисовка прикладного контента вызывается с помощью прикладного
           контекста

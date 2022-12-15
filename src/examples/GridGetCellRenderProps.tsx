@@ -11,6 +11,14 @@ import {
   TGetCellRenderPropsCallback,
 } from "../grid";
 
+const COMMENT = `
+Плюсы:
+   1. Можно писать полностью на рельсах реакта, то есть нам не нужно будет делать глубоких сравниваний объектов.
+   
+Минусы:
+   1. Производительность. Перерисовка будет затрагивать список + все строки + все обертки от прикладников до списка
+`;
+
 function CustomCellRender(
   props: ICellContentRenderProps<CustomCellProps>
 ): React.ReactElement {
@@ -44,7 +52,7 @@ export default function GridGetCellRenderProps(): React.ReactElement {
 
   return (
     <div>
-      <div>
+      <div title={COMMENT}>
         <b>
           Перерисовка прикладного контента вызывается с помощью
           Grid.getCellRenderProps - callback

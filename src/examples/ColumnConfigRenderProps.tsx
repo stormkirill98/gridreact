@@ -7,6 +7,16 @@ import {
 } from "./utils";
 import { Grid, ICellContentRenderProps } from "../grid";
 
+const COMMENT = `
+Плюсы:
+   1. Ничего нового для прикладников)
+   
+Минусы:
+   1. Производительность. Перерисовка будет затрагивать список + все строки + все обертки от прикладников до списка
+   2. Пересоздание массива с колонками + пересоздание конфига колонки, которую нужно перерисовать.
+       Прикладнику нужно правильно делать обновление, чтобы не перерисовать ничего лишнего.
+`;
+
 function CustomCellRender(
   props: ICellContentRenderProps<CustomCellProps>
 ): React.ReactElement {
@@ -44,7 +54,7 @@ export default function ColumnConfigRenderProps(): React.ReactElement {
 
   return (
     <div>
-      <div>
+      <div title={COMMENT}>
         <b>
           Перерисовка прикладного контента вызывается с помощью
           ColumnConfig.renderProps
