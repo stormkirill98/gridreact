@@ -27,6 +27,7 @@ export interface IColumnConfig<TRenderProps = any> {
     * Кастомные опции для рендера контента.
     */
    renderProps?: TRenderProps;
+   getRenderProps?: (item: Record<string, string>) => TRenderProps;
 }
 
 export interface ICellContentRenderProps<TRenderProps = any, TRenderValue = any> {
@@ -36,8 +37,10 @@ export interface ICellContentRenderProps<TRenderProps = any, TRenderValue = any>
 }
 
 interface ICellComponentProps {
+   displayProperty: string| string[];
+   render?: TCellRender;
+
    item: Record<string, string>;
-   column: IColumnConfig;
    renderValue: TRenderValue;
    cellRenderProps?: any;
 }
@@ -45,14 +48,14 @@ interface ICellComponentProps {
 function CellComponent(props: ICellComponentProps): React.ReactElement {
    let content: string | React.ReactElement;
 
-   if (props.column.render) {
-      content = <props.column.render item={props.item}
-                                     renderProps={props.cellRenderProps || props.column.renderProps}
+   if (props.render) {
+      content = <props.render item={props.item}
+                                     renderProps={props.cellRenderProps}
                                      renderValue={props.renderValue}/>;
    } else {
-      const displayProperty = typeof props.column.displayProperty === 'string'
-         ? props.column.displayProperty
-         : props.column.displayProperty[0];
+      const displayProperty = typeof props.displayProperty === 'string'
+         ? props.displayProperty
+         : props.displayProperty[0];
       content = props.item[displayProperty];
    }
 
