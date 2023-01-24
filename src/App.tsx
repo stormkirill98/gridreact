@@ -1,43 +1,51 @@
 import "./styles.css";
-import React from 'react';
-import {Grid, ICellContentRenderProps, IColumnConfig } from "./grid";
+import React from "react";
 
-function generateData(count: Number): Record<string, string>[] {
-   const result: Record<string, string>[] = [];
+function Render(props: any) {
+  const [state, setState] = React.useState(0);
 
-   for (let idx = 1; idx <= count; idx++) {
-      result.push({
-         key: `${idx}`,
-         a: `cell_${idx}_a`,
-         b: `cell_${idx}_b`,
-         c: `cell_${idx}_c`,
-         d: `cell_${idx}_d`,
-         e: `cell_${idx}_e`
-      });
-   }
-
-   return result;
+  return (
+    <div>
+      {props.item + ", state=" + state}
+      <br />
+      <button onClick={() => setState((prev) => prev + 1)}>
+        Change RenderState
+      </button>
+    </div>
+  );
 }
 
-const TABLE_DATA = generateData(10);
-const COLUMNS: IColumnConfig[] = [
-   { width: "1fr", dependentProperties: ["a"] },
-   { width: "1fr", dependentProperties: ["b"] },
-   { width: "1fr", dependentProperties: ["c", 'd'], render: CustomCellRender },
-];
+const RenderMemo = React.memo(Render);
 
-function CustomCellRender(props: ICellContentRenderProps): React.ReactElement {
-   return (
-      <div>
-         {`${props.item.c} ${props.item.d}`}
-      </div>
-   );
+function Wrapper(props: { render: React.ReactElement; item: string }) {
+  return <div>{React.cloneElement(props.render, { item: props.item })}</div>;
 }
 
 export default function App() {
-   return (
-      <div className="App">
-         <Grid keyProperty={'key'} items={TABLE_DATA} columns={COLUMNS} />
-      </div>
-   );
+  const [state, setState] = React.useState(0);
+
+  return (
+    <div className="App">
+      {/* @ts-ignore */}
+      {/* <Wrapper item="var 1" render={(item) => <Render item={item} />} /> */}
+      {/* @ts-ignore */}
+      {/* <Wrapper item="var 2" render={(item) => <div>{item}</div>} /> */}
+      {/* @ts-ignore */}
+      {/* <Wrapper item="var 3" render={Render} /> */}
+      {/* @ts-ignore */}
+      <Wrapper item="var 4" render={RenderMemo} />
+      {/* @ts-ignore */}
+      <Wrapper item="var 5" render={<Render item={"var5"} />} />
+      {/* @ts-ignore */}
+      {/* <Wrapper item="var 6" render={(item) => null} /> */}
+
+      <br />
+      <br />
+      {"app state = " + state}
+      <br />
+      <button onClick={() => setState((prev) => prev + 1)}>
+        Change AppState
+      </button>
+    </div>
+  );
 }
